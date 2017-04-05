@@ -7,27 +7,85 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  StyleSheet,
-  Text,
-  View
+  Navigator,
+  StyleSheet
 } from 'react-native';
 
-export default class Melden extends Component {
+import * as firebase from 'firebase';
+import Firebase from './melden/firebase/init';
+
+import Login from './melden/views/Login';
+import CreateAccount from './melden/views/CreateAccount';
+import Tasks from './melden/views/Tasks';
+
+class Melden extends Component {
+
+  constructor(props) {
+    super(props);
+
+    Firebase.initialise();
+
+    this.getInitialView();
+
+    this.state = {
+      userLoaded: false,
+      initialView: null
+    };
+
+    this.getInitialView = this.getInitialView.bind(this);
+  }
+
+  getInitialView() {
+    firebase.auth().onAuthStateChanged((user) => {
+
+      let initialView = user ? "Tasks" : "Login";
+
+      this.setState({
+        userLoaded: true,
+        initialView: initialView
+      })
+    });
+  }
+
+  static renderScene(route, navigator) {
+    switch (route.name) {
+      case "Tasks":
+        return (<Tasks navigator={navigator} />);
+        break;
+
+      case "Login":
+        return (<Login navigator={navigator} />);
+        break;
+
+      case "CreateAccount":
+        return (<CreateAccount navigator={navigator} />);
+        break;
+    }
+  }
+
+  static configureScene(route) {
+    if (route.sceneConfig) {
+      return (route.sceneConfig);
+    } else {
+      return ({
+        ...Navigator.SceneConfigs.HorizontalSwipeJump,
+        gestures: {}
+      });
+    }
+  }
+
   render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
+    console.log(this.state)
+    if (this.state.userLoaded) {
+      return (
+          <Navigator
+              initialRoute={{name: this.state.initialView}}
+              renderScene={Melden.renderScene}
+              configureScene={Melden.configureScene}
+          />);
+    } else {
+      return null;
+    }
   }
 }
 
