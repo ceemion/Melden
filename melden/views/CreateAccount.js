@@ -16,6 +16,8 @@ import {
 import DismissKeyboard from "dismissKeyboard";
 import * as firebase from "firebase";
 
+import Database from '../firebase/database';
+
 class CreateAccount extends Component {
   constructor(props) {
     super(props);
@@ -35,16 +37,17 @@ class CreateAccount extends Component {
 
     try {
       await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
+      let user = await firebase.auth().currentUser;
+
+      Database.setsUserData(user.uid, this.state.name, this.state.email)
 
       this.setState({
         response: "Account created"
       });
 
-      setTimeout(() => {
-        this.props.navigator.push({
-          name: "Home"
-        })
-      }, 1500);
+      this.props.navigator.push({
+        name: "Tasks"
+      })
     }
     catch(error) {
       this.setState({
