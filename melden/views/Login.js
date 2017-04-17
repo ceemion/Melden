@@ -31,6 +31,7 @@ class Login extends Component {
 
   async login() {
     DismissKeyboard();
+    this.setState({response: 'loading...'})
 
     try {
       await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
@@ -41,9 +42,9 @@ class Login extends Component {
 
       setTimeout(() => {
         this.props.navigator.push({
-          name: "Home"
+          name: "Tasks"
         })
-      }, 1500);
+      }, 500);
     }
     catch(error) {
       this.setState({

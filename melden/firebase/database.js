@@ -4,8 +4,6 @@
 
 import * as firebase from 'firebase';
 
-// const DATABASE = firebase.database();
-
 class Database {
   /**
    * Sets the name of a registered user

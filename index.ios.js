@@ -17,6 +17,9 @@ import Firebase from './melden/firebase/init';
 import Login from './melden/views/Login';
 import CreateAccount from './melden/views/CreateAccount';
 import Tasks from './melden/views/Tasks';
+import Expenses from './melden/views/Expenses';
+import Reports from './melden/views/Reports';
+import Profile from './melden/views/Profile';
 
 class Melden extends Component {
 
@@ -49,16 +52,28 @@ class Melden extends Component {
 
   static renderScene(route, navigator) {
     switch (route.name) {
-      case "Tasks":
-        return (<Tasks navigator={navigator} />);
-        break;
-
       case "Login":
         return (<Login navigator={navigator} />);
         break;
 
       case "CreateAccount":
         return (<CreateAccount navigator={navigator} />);
+        break;
+
+      case "Tasks":
+        return (<Tasks navigator={navigator} />);
+        break;
+
+      case "Expenses":
+        return (<Expenses navigator={navigator} />);
+        break;
+
+      case "Reports":
+        return (<Reports navigator={navigator} />);
+        break;
+
+        case "Profile":
+        return (<Profile navigator={navigator} />);
         break;
     }
   }
@@ -75,7 +90,6 @@ class Melden extends Component {
   }
 
   render() {
-    console.log(this.state)
     if (this.state.userLoaded) {
       return (
           <Navigator
