@@ -13,7 +13,11 @@ import {
     TouchableHighlight,
     TouchableWithoutFeedback
 } from 'react-native';
+import {
+  titleHeight
+} from '../utils/variables';
 import DismissKeyboard from "dismissKeyboard";
+import TopBar from './TopBar';
 
 import * as firebase from "firebase";
 import Database from '../firebase/database';
@@ -59,15 +63,10 @@ class CreateAccount extends Component {
 
   render() {      
     return (
-      <TouchableWithoutFeedback onPress={() => {DismissKeyboard()}}>
-        <View>
-          
-          <Text>Create Account</Text>
-          <View>
-            <TouchableHighlight onPress={() => this.props.navigator.pop()}>
-              <Text>Back</Text>
-            </TouchableHighlight>
-          </View>
+      <View onPress={() => {DismissKeyboard()}}>
+        <TopBar title="Create Account" />
+
+        <View style={styles.container}>
           <TextInput
             style={{height: 40, borderColor: 'gray', borderWidth: 1}}
             onChangeText={(name) => this.setState({name})}
@@ -105,9 +104,15 @@ class CreateAccount extends Component {
             <Text>{this.state.response}</Text>
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: titleHeight
+  }
+});
 
 export default CreateAccount;
