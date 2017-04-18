@@ -61,10 +61,14 @@ class CreateAccount extends Component {
     }
   }
 
-  render() {      
+  render() {
     return (
       <View onPress={() => {DismissKeyboard()}}>
-        <TopBar title="Create Account" />
+        <TopBar
+          title="Create Account"
+          leftIcon={true}
+          navigator={this.props.navigator}
+        />
 
         <View style={styles.container}>
           <TextInput

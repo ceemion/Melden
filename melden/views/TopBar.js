@@ -2,24 +2,61 @@
  * @class TopBar
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
     Text,
     View,
+    Image,
     Dimensions,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity
 } from 'react-native';
 import {
+  primary,
   topBar,
   topBorder
 } from '../utils/colors';
+import leftIcon from '../assets/images/left_icon.png';
 
 let width = Dimensions.get('window').width;
 
 class TopBar extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      leftIcon: this.props.leftIcon
+    }
+
+    this._renderLeftNav = this._renderLeftNav.bind(this);
+  }
+
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    leftIcon: PropTypes.bool,
+    leftText: PropTypes.string,
+    navigator: PropTypes.object
+  }
+
+  _renderLeftNav() {
+    if (this.state.leftIcon) {
+      return (
+        <TouchableOpacity onPress={() => this.props.navigator.pop()}>
+          <View style={styles.leftContainer}>
+            <Image style={styles.leftIcon} source={leftIcon} />
+            { this.props.leftText ?
+              <Text style={styles.leftText}>{this.props.leftText}</Text> : null }
+          </View>
+        </TouchableOpacity>
+      )
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        {this._renderLeftNav()}
+
         <View style={styles.title}>
           <Text style={styles.text}>
             {this.props.title}
@@ -53,6 +90,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 17
   },
+  leftIcon: {
+    marginLeft: 8
+  }
 });
 
 export default TopBar;
