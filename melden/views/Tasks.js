@@ -20,8 +20,6 @@ class Tasks extends Component {
     this.state = {
       uid: ""
     };
-
-    this.logout = this.logout.bind(this);
   }
 
   async componentDidMount() {
@@ -36,33 +34,20 @@ class Tasks extends Component {
     }
   }
 
-  async logout() {
-    try {
-      await firebase.auth().signOut();
-
-      this.props.navigator.push({
-        name: "Login"
-      })
-    }
-    catch(error) {
-      console.log(error)
-    }
-  }
-
   render() {
     return (
-      <View>
-        <Text>Welcome Home</Text>
+      <View style={styles.container}>
+        <Text>Welcome to Tasks</Text>
         <Text>Hello UserId: {this.state.uid}</Text>
-        <Button
-          onPress={this.logout}
-          title="Logout"
-          color="#841584"
-          accessibilityLabel="logout"
-        />
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 64
+  }
+});
 
 export default Tasks;

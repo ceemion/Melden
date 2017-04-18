@@ -14,8 +14,8 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 import DismissKeyboard from "dismissKeyboard";
-import * as firebase from "firebase";
 
+import * as firebase from "firebase";
 import Database from '../firebase/database';
 
 class CreateAccount extends Component {
@@ -34,6 +34,7 @@ class CreateAccount extends Component {
 
   async createAccount() {
     DismissKeyboard();
+    this.setState({response: 'Creating your Melden account...'})
 
     try {
       await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);

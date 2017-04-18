@@ -31,18 +31,18 @@ class Login extends Component {
 
   async login() {
     DismissKeyboard();
-    this.setState({response: 'loading...'})
+    this.setState({response: 'Just a moment...'})
 
     try {
       await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
 
       this.setState({
-        response: "Logged in!"
+        response: "Welcome back!"
       });
 
       setTimeout(() => {
         this.props.navigator.push({
-          name: "Tasks"
+          name: "switchTabs"
         })
       }, 500);
     }

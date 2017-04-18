@@ -16,13 +16,10 @@ import Firebase from './melden/firebase/init';
 
 import Login from './melden/views/Login';
 import CreateAccount from './melden/views/CreateAccount';
-import Tasks from './melden/views/Tasks';
-import Expenses from './melden/views/Expenses';
-import Reports from './melden/views/Reports';
-import Profile from './melden/views/Profile';
+import SwitchTabs from './melden/views/SwitchTabs';
+import NotFound from './melden/views/404';
 
 class Melden extends Component {
-
   constructor(props) {
     super(props);
 
@@ -40,8 +37,7 @@ class Melden extends Component {
 
   getInitialView() {
     firebase.auth().onAuthStateChanged((user) => {
-
-      let initialView = user ? "Tasks" : "Login";
+      let initialView = user ? "switchTabs" : "Login";
 
       this.setState({
         userLoaded: true,
@@ -60,21 +56,12 @@ class Melden extends Component {
         return (<CreateAccount navigator={navigator} />);
         break;
 
-      case "Tasks":
-        return (<Tasks navigator={navigator} />);
+      case "switchTabs":
+        return (<SwitchTabs navigator={navigator} />);
         break;
 
-      case "Expenses":
-        return (<Expenses navigator={navigator} />);
-        break;
-
-      case "Reports":
-        return (<Reports navigator={navigator} />);
-        break;
-
-        case "Profile":
-        return (<Profile navigator={navigator} />);
-        break;
+      default:
+        return (<NotFound />);
     }
   }
 
@@ -92,11 +79,11 @@ class Melden extends Component {
   render() {
     if (this.state.userLoaded) {
       return (
-          <Navigator
-              initialRoute={{name: this.state.initialView}}
-              renderScene={Melden.renderScene}
-              configureScene={Melden.configureScene}
-          />);
+        <Navigator
+          initialRoute={{name: this.state.initialView}}
+          renderScene={Melden.renderScene}
+          configureScene={Melden.configureScene}
+        />);
     } else {
       return null;
     }
