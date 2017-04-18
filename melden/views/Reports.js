@@ -6,7 +6,12 @@ import React, { Component } from 'react';
 import {
     Text,
     View,
+    StyleSheet
 } from 'react-native';
+
+import {
+  titleHeight
+} from '../utils/variables';
 
 class Reports extends Component {
   constructor(props) {
@@ -17,12 +22,18 @@ class Reports extends Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <Text>Reports</Text>
         <Text>All our reports</Text>
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: titleHeight
+  }
+});
 
 export default Reports;

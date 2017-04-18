@@ -10,6 +10,10 @@ import {
     StyleSheet
 } from 'react-native';
 
+import {
+  titleHeight
+} from '../utils/variables';
+
 import * as firebase from "firebase";
 
 class Profile extends Component {
@@ -69,7 +73,7 @@ class Profile extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 64
+    marginTop: titleHeight
   }
 });
 

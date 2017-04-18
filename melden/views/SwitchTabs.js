@@ -17,12 +17,18 @@ import {
 
 import TopBar from './TopBar'
 import Tasks from './Tasks';
+import Expenses from './Expenses';
+import Reports from './Reports';
 import Profile from './Profile';
 
 import TasksIcon from '../assets/images/tab_bar_icons/30 - iPhone Tasks.png';
 import TasksIconSelected from '../assets/images/tab_bar_icons/30 - iPhone Tasks Selected.png';
 import ProfileIcon from '../assets/images/tab_bar_icons/30 - iPhone Profile.png';
 import ProfileIconSelected from '../assets/images/tab_bar_icons/30 - iPhone Profile Selected.png';
+import ExpensesIcon from '../assets/images/tab_bar_icons/30 - iPhone Expenses.png';
+import ExpensesIconSelected from '../assets/images/tab_bar_icons/30 - iPhone Expenses Selected.png';
+import ReportsIcon from '../assets/images/tab_bar_icons/30 - iPhone Reports.png';
+import ReportsIconSelected from '../assets/images/tab_bar_icons/30 - iPhone Reports Selected.png';
 
 class SwitchTabs extends Component {
   constructor(props) {
@@ -53,6 +59,38 @@ class SwitchTabs extends Component {
           <View>
             <TopBar title="Tasks" />
             <Tasks navigator={this.props.navigator} />
+          </View>
+        </TabBarIOS.Item>
+
+        <TabBarIOS.Item
+          title="Expenses"
+          icon={ExpensesIcon}
+          selectedIcon={ExpensesIconSelected}
+          selected={this.state.selectedTab === 'expensesTab'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'expensesTab'
+            })
+          }}>
+          <View>
+            <TopBar title="Expenses" />
+            <Expenses navigator={this.props.navigator} />
+          </View>
+        </TabBarIOS.Item>
+
+        <TabBarIOS.Item
+          title="Reports"
+          icon={ReportsIcon}
+          selectedIcon={ReportsIconSelected}
+          selected={this.state.selectedTab === 'reportsTab'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'reportsTab'
+            })
+          }}>
+          <View>
+            <TopBar title="Reports" />
+            <Reports navigator={this.props.navigator} />
           </View>
         </TabBarIOS.Item>
 

@@ -11,6 +11,10 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 
+import {
+  titleHeight
+} from '../utils/variables';
+
 import * as firebase from "firebase";
 
 class Tasks extends Component {
@@ -46,7 +50,7 @@ class Tasks extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 64
+    marginTop: titleHeight
   }
 });
 

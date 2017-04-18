@@ -6,8 +6,8 @@ import React, { Component } from 'react';
 import {
     Text,
     View,
-    StyleSheet,
-    Dimensions
+    Dimensions,
+    StyleSheet
 } from 'react-native';
 import {
   topBar,
