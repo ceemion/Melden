@@ -117,7 +117,7 @@ class CreateAccount extends Component {
       <View style={styles.container} onPress={() => {DismissKeyboard()}}>
         <TopBar
           title="Create Account"
-          leftIcon={true}
+          left={true}
           navigator={this.props.navigator}
         />
 

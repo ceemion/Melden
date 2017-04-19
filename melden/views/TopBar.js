@@ -16,7 +16,7 @@ import {
   topBar,
   topBorder
 } from '../utils/colors';
-import leftIcon from '../assets/images/left_icon.png';
+import leftIcon from '../assets/images/header_bar_icons/left_icon.png';
 
 let width = Dimensions.get('window').width;
 
@@ -25,27 +25,52 @@ class TopBar extends Component {
     super(props)
 
     this.state = {
-      leftIcon: this.props.leftIcon
+      left: this.props.left,
+      right: this.props.right
     }
 
     this._renderLeftNav = this._renderLeftNav.bind(this);
+    this._renderRightNav = this._renderRightNav.bind(this);
   }
 
   static propTypes = {
     title: PropTypes.string.isRequired,
-    leftIcon: PropTypes.bool,
+    left: PropTypes.bool,
     leftText: PropTypes.string,
-    navigator: PropTypes.object
+    navigator: PropTypes.object,
+    right: PropTypes.bool,
+    rightIcon: PropTypes.number,
+    rightText: PropTypes.string,
+    rightOnPress: PropTypes.func
   }
 
   _renderLeftNav() {
-    if (this.state.leftIcon) {
+    if (this.state.left) {
       return (
         <TouchableOpacity onPress={() => this.props.navigator.pop()}>
           <View style={styles.leftContainer}>
             <Image style={styles.leftIcon} source={leftIcon} />
             { this.props.leftText ?
-              <Text style={styles.leftText}>{this.props.leftText}</Text> : null }
+                <Text style={styles.leftText}>{this.props.leftText}</Text>
+              : null }
+          </View>
+        </TouchableOpacity>
+      )
+    }
+  }
+
+  _renderRightNav() {
+    if (this.state.right) {
+      return (
+        <TouchableOpacity onPress={() => this.props.rightOnPress()}>
+          <View style={styles.rightContainer}>
+            { this.props.rightText ?
+                <Text style={styles.rightText}>{this.props.rightText}</Text>
+              : null }
+
+            { this.props.rightIcon ?
+                <Image style={styles.rightIcon} source={this.props.rightIcon} />
+              : null }
           </View>
         </TouchableOpacity>
       )
@@ -62,6 +87,8 @@ class TopBar extends Component {
             {this.props.title}
           </Text>
         </View>
+
+        {this._renderRightNav()}
       </View>
     );
   }
@@ -69,29 +96,54 @@ class TopBar extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
     backgroundColor: topBar,
     borderBottomWidth: 0.5,
     borderColor: topBorder,
-    flex: 1,
     flexDirection: 'row',
     height: 64,
-    left: 0,
+    justifyContent: 'space-between',
     marginBottom: 0,
-    paddingTop: 30,
-    position: 'absolute',
-    top: 0,
-    width: width
+    paddingTop: 10
   },
   title: {
-    alignItems: 'center',
-    flex: 1,
-    width: width - 200
+    flexGrow: 2,
+    zIndex: -1
   },
   text: {
-    fontSize: 17
+    fontSize: 17,
+    textAlign: 'center'
+  },
+  leftContainer: {
+    flexDirection: 'row',
+    flexGrow: 0,
+    position: 'absolute',
+    left: 8,
+    top: -10
   },
   leftIcon: {
-    marginLeft: 8
+    height: 20,
+    marginRight: 5,
+    width: 12
+  },
+  leftText: {
+    color: primary
+  },
+  rightContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexGrow: 0,
+    position: 'absolute',
+    right: 8,
+    bottom: -14
+  },
+  rightIcon: {
+    height: 27,
+    marginLeft: 5,
+    width: 27
+  },
+  rightText: {
+    color: primary
   }
 });
 
