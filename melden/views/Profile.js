@@ -7,6 +7,7 @@ import {
     Text,
     View,
     Button,
+    AlertIOS,
     StyleSheet
 } from 'react-native';
 
@@ -15,6 +16,9 @@ import {
 } from '../utils/variables';
 
 import * as firebase from "firebase";
+
+import TopBar from './TopBar';
+import UpdateProfileIcon from '../assets/images/header_bar_icons/update_profile.png';
 
 class Profile extends Component {
   constructor(props) {
@@ -26,6 +30,7 @@ class Profile extends Component {
       email: null
     };
 
+    this._updateProfile = this._updateProfile.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -43,6 +48,12 @@ class Profile extends Component {
     }
   }
 
+  _updateProfile(promptValue) {
+    this.setState({
+      name: promptValue
+    })
+  }
+
   async logout() {
     try {
       await firebase.auth().signOut();
@@ -58,25 +69,40 @@ class Profile extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Profile</Text>
-        <Text>the profile of {this.state.uid}</Text>
-        <Text>email: {this.state.email}</Text>
-        <Text>name: {this.state.name}</Text>
-
-        <Button
-          onPress={this.logout}
-          title="Logout"
-          color="#841584"
-          accessibilityLabel="logout"
+      <View>
+        <TopBar
+          title="Profile"
+          right={true}
+          rightIcon={UpdateProfileIcon}
+          rightOnPress={() => AlertIOS.prompt(
+            'Update Your Profile',
+            this.state.name ? null : "What's your name?",
+            this._updateProfile,
+            undefined,
+            this.state.name ? this.state.name : ''
+            )}
         />
+
+        <View style={styles.content}>
+          <Text>Profile</Text>
+          <Text>the profile of {this.state.uid}</Text>
+          <Text>email: {this.state.email}</Text>
+          <Text>name: {this.state.name}</Text>
+
+          <Button
+            onPress={this.logout}
+            title="Logout"
+            color="#841584"
+            accessibilityLabel="logout"
+          />
+        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     marginTop: titleHeight
   }
 });
