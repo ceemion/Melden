@@ -87,14 +87,20 @@ class CreateAccount extends Component {
       await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
       let user = await firebase.auth().currentUser;
 
+      user.updateProfile({
+        displayName: this.state.name
+      });
+
       Database.setsUserData(user.uid, this.state.name, this.state.email)
 
       this.setState({
+        animating: false,
+        responseType: 'success',
         response: "Account created"
       });
 
       this.props.navigator.push({
-        name: "Tasks"
+        name: "switchTabs"
       })
     }
     catch(error) {
