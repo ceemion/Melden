@@ -6,3 +6,5 @@ export const tabSelected = primary;
 
 export const topBar = '#f9f9f9';
 export const topBorder = 'rgba(0,0,0,0.20)';
+
+export const inputBorder = '#d8d8d8';

@@ -14,6 +14,9 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 import {
+  inputBorder
+} from '../utils/colors';
+import {
   titleHeight
 } from '../utils/variables';
 import DismissKeyboard from "dismissKeyboard";
@@ -30,6 +33,7 @@ class CreateAccount extends Component {
       name: "",
       email: "",
       password: "",
+      responseType: "",
       response: ""
     };
 
@@ -38,7 +42,10 @@ class CreateAccount extends Component {
 
   async createAccount() {
     DismissKeyboard();
-    this.setState({response: 'Creating your Melden account...'})
+    this.setState({
+      responseType: 'busy',
+      response: 'Creating your Melden account...'
+    })
 
     try {
       await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password);
@@ -56,7 +63,8 @@ class CreateAccount extends Component {
     }
     catch(error) {
       this.setState({
-        response: error.toString()
+        responseType: error.toString().split(':')[0],
+        response: error.message
       })
     }
   }
@@ -71,15 +79,20 @@ class CreateAccount extends Component {
         />
 
         <View style={styles.container}>
+          <View>
+            <Text>{this.state.response}</Text>
+          </View>
+
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            style={styles.textInput}
             onChangeText={(name) => this.setState({name})}
             value={this.state.name}
             autoCapitalize="words"
             placeholder="name"
+            autoFocus={true}
           />
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            style={styles.textInput}
             onChangeText={(email) => this.setState({email})}
             value={this.state.email}
             autoCapitalize="none"
@@ -87,7 +100,7 @@ class CreateAccount extends Component {
             keyboardType="email-address"
           />
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            style={styles.textInput}
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
             autoCapitalize="none"
@@ -103,10 +116,6 @@ class CreateAccount extends Component {
               accessibilityLabel="create account"
             />
           </View>
-
-          <View>
-            <Text>{this.state.response}</Text>
-          </View>
         </View>
       </View>
     )
@@ -115,7 +124,17 @@ class CreateAccount extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: titleHeight
+    marginTop: titleHeight,
+    paddingTop: 25
+  },
+  textInput: {
+    borderColor: inputBorder,
+    borderWidth: 1,
+    height: 40,
+    marginBottom: 25,
+    marginLeft: 10,
+    marginRight: 10,
+    padding: 10
   }
 });
 

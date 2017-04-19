@@ -22,6 +22,7 @@ class Login extends Component {
     this.state = {
         email: "",
         password: "",
+        responseType: "",
         response: ""
     };
 
@@ -31,12 +32,16 @@ class Login extends Component {
 
   async login() {
     DismissKeyboard();
-    this.setState({response: 'Just a moment...'})
+    this.setState({
+      responseType: 'busy',
+      response: 'Just a moment...'
+    })
 
     try {
       await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
 
       this.setState({
+        responseType: 'success',
         response: "Welcome back!"
       });
 
@@ -48,7 +53,8 @@ class Login extends Component {
     }
     catch(error) {
       this.setState({
-        response: error.toString()
+        responseType: error.toString().split(':')[0],
+        response: error.message
       })
     }
   }
