@@ -34,7 +34,9 @@ class Profile extends Component {
       let user = await firebase.auth().currentUser;
 
       this.setState({
-        uid: user.uid
+        uid: user.uid,
+        email: user.email,
+        name: user.displayName
       })
     } catch(error) {
       console.log(error);
@@ -59,6 +61,8 @@ class Profile extends Component {
       <View style={styles.container}>
         <Text>Profile</Text>
         <Text>the profile of {this.state.uid}</Text>
+        <Text>email: {this.state.email}</Text>
+        <Text>name: {this.state.name}</Text>
 
         <Button
           onPress={this.logout}
