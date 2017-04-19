@@ -22,6 +22,7 @@ import {
   success,
   textMute,
   buttonText,
+  containerBg,
   inputBorder
 } from '../utils/colors';
 import {
@@ -110,14 +111,14 @@ class CreateAccount extends Component {
 
   render() {
     return (
-      <View onPress={() => {DismissKeyboard()}}>
+      <View style={styles.container} onPress={() => {DismissKeyboard()}}>
         <TopBar
           title="Create Account"
           leftIcon={true}
           navigator={this.props.navigator}
         />
 
-        <View style={styles.container}>
+        <View style={styles.form}>
           <View style={[styles.responseBox, {borderColor: this._setResponseColor()}]}>
             <Text
               style={[styles.responseText, {color: this._setResponseColor()}]}>
@@ -171,6 +172,10 @@ class CreateAccount extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: containerBg,
+    flex: 1
+  },
+  form: {
     marginTop: titleHeight
   },
   responseBox: {
@@ -184,6 +189,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   textInput: {
+    backgroundColor: white,
     borderColor: inputBorder,
     borderWidth: 1,
     height: 40,
