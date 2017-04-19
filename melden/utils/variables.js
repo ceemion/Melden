@@ -1,1 +1,1 @@
-export const titleHeight = 64;
+export const titleHeight = 10;

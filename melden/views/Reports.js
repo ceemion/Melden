@@ -13,6 +13,8 @@ import {
   titleHeight
 } from '../utils/variables';
 
+import TopBar from './TopBar';
+
 class Reports extends Component {
   constructor(props) {
     super(props);
@@ -22,16 +24,20 @@ class Reports extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Reports</Text>
-        <Text>All our reports</Text>
+      <View>
+        <TopBar title="Reports" />
+
+        <View style={styles.content}>
+          <Text>Reports</Text>
+          <Text>All our reports</Text>
+        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     marginTop: titleHeight
   }
 });

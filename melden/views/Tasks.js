@@ -17,6 +17,8 @@ import {
 
 import * as firebase from "firebase";
 
+import TopBar from './TopBar';
+
 class Tasks extends Component {
   constructor(props) {
     super(props);
@@ -40,16 +42,20 @@ class Tasks extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Welcome to Tasks</Text>
-        <Text>Hello UserId: {this.state.uid}</Text>
+      <View>
+        <TopBar title="Tasks" />
+
+        <View style={styles.content}>
+          <Text>Welcome to Tasks</Text>
+          <Text>Hello UserId: {this.state.uid}</Text>
+        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     marginTop: titleHeight
   }
 });

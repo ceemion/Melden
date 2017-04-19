@@ -15,7 +15,6 @@ import {
   tabSelected
 } from '../utils/colors';
 
-import TopBar from './TopBar'
 import Tasks from './Tasks';
 import Expenses from './Expenses';
 import Reports from './Reports';
@@ -56,10 +55,7 @@ class SwitchTabs extends Component {
               selectedTab: 'tasksTab'
             })
           }}>
-          <View>
-            <TopBar title="Tasks" />
-            <Tasks navigator={this.props.navigator} />
-          </View>
+          <Tasks navigator={this.props.navigator} />
         </TabBarIOS.Item>
 
         <TabBarIOS.Item
@@ -72,10 +68,7 @@ class SwitchTabs extends Component {
               selectedTab: 'expensesTab'
             })
           }}>
-          <View>
-            <TopBar title="Expenses" />
-            <Expenses navigator={this.props.navigator} />
-          </View>
+          <Expenses navigator={this.props.navigator} />
         </TabBarIOS.Item>
 
         <TabBarIOS.Item
@@ -88,10 +81,7 @@ class SwitchTabs extends Component {
               selectedTab: 'reportsTab'
             })
           }}>
-          <View>
-            <TopBar title="Reports" />
-            <Reports navigator={this.props.navigator} />
-          </View>
+          <Reports navigator={this.props.navigator} />
         </TabBarIOS.Item>
 
         <TabBarIOS.Item
@@ -104,10 +94,7 @@ class SwitchTabs extends Component {
               selectedTab: 'profileTab'
             })
           }}>
-          <View>
-            <TopBar title="Profile" />
-            <Profile navigator={this.props.navigator} />
-          </View>
+          <Profile navigator={this.props.navigator} />
         </TabBarIOS.Item>
       </TabBarIOS>
     );
