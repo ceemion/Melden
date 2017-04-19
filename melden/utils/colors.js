@@ -4,6 +4,7 @@ export const error = '#f33e39';
 
 export const white = '#ffffff';
 export const black = '#000000';
+export const lightGrey = '#efefef';
 
 export const containerBg = '#f7f7f7';
 export const textMute = '#9b9b9b';
