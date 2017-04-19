@@ -6,14 +6,12 @@ import React, { Component } from 'react';
 import {
     Text,
     View,
-    TextInput,
     Button,
+    TextInput,
     StyleSheet,
     dismissKeyboard,
     TouchableOpacity,
-    ActivityIndicator,
-    TouchableHighlight,
-    TouchableWithoutFeedback
+    ActivityIndicator
 } from 'react-native';
 import {
   white,
@@ -30,7 +28,6 @@ import {
 } from '../utils/variables';
 import DismissKeyboard from "dismissKeyboard";
 import TopBar from './TopBar';
-
 import * as firebase from "firebase";
 import Database from '../firebase/database';
 
