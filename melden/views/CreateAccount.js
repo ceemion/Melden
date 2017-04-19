@@ -10,10 +10,18 @@ import {
     Button,
     StyleSheet,
     dismissKeyboard,
+    TouchableOpacity,
+    ActivityIndicator,
     TouchableHighlight,
     TouchableWithoutFeedback
 } from 'react-native';
 import {
+  white,
+  error,
+  primary,
+  success,
+  textMute,
+  buttonText,
   inputBorder
 } from '../utils/colors';
 import {
@@ -34,15 +42,45 @@ class CreateAccount extends Component {
       email: "",
       password: "",
       responseType: "",
-      response: ""
+      response: "",
+      animating: false
     };
 
+    this._renderButtonText = this._renderButtonText.bind(this);
+    this._setResponseColor = this._setResponseColor.bind(this);
     this.createAccount = this.createAccount.bind(this);
+  }
+
+  _renderButtonText() {
+    if (this.state.animating) {
+      return (
+        <ActivityIndicator
+          animating={true}
+          color="black"
+        />
+      )
+    }
+
+    return (<Text style={styles.buttonText}>Create account</Text>)
+  }
+
+  _setResponseColor() {
+    switch(this.state.responseType.toLocaleLowerCase()) {
+      case 'success':
+        return success;
+      case 'error':
+        return error;
+      case 'busy':
+        return textMute;
+      default:
+        return 'transparent'
+    }
   }
 
   async createAccount() {
     DismissKeyboard();
     this.setState({
+      animating: true,
       responseType: 'busy',
       response: 'Creating your Melden account...'
     })
@@ -63,6 +101,7 @@ class CreateAccount extends Component {
     }
     catch(error) {
       this.setState({
+        animating: false,
         responseType: error.toString().split(':')[0],
         response: error.message
       })
@@ -79,8 +118,11 @@ class CreateAccount extends Component {
         />
 
         <View style={styles.container}>
-          <View>
-            <Text>{this.state.response}</Text>
+          <View style={[styles.responseBox, {borderColor: this._setResponseColor()}]}>
+            <Text
+              style={[styles.responseText, {color: this._setResponseColor()}]}>
+              {this.state.response}
+            </Text>
           </View>
 
           <TextInput
@@ -109,13 +151,18 @@ class CreateAccount extends Component {
           />
 
           <View>
-            <Button
-              onPress={this.createAccount}
-              title="Create account"
-              color="#4a4a4a"
-              accessibilityLabel="create account"
-            />
+            <TouchableOpacity onPress={this.createAccount}>
+              <View style={styles.button}>
+                {this._renderButtonText()}
+              </View>
+            </TouchableOpacity>
           </View>
+        </View>
+
+        <View>
+          <Text style={styles.signature}>
+            powered by <Text style={{color: primary}}>Kompila</Text>
+          </Text>
         </View>
       </View>
     )
@@ -124,8 +171,17 @@ class CreateAccount extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: titleHeight,
-    paddingTop: 25
+    marginTop: titleHeight
+  },
+  responseBox: {
+    borderRadius: 50,
+    borderWidth: 0.5,
+    margin: 10,
+    padding: 5
+  },
+  responseText: {
+    fontSize: 12,
+    textAlign: 'center'
   },
   textInput: {
     borderColor: inputBorder,
@@ -134,7 +190,32 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     marginLeft: 10,
     marginRight: 10,
-    padding: 10
+    padding: 10,
+    textAlign: 'center'
+  },
+  button: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    backgroundColor: white,
+    borderColor: inputBorder,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: 'row',
+    height: 57,
+    justifyContent: 'center',
+    marginLeft: 10,
+    marginRight: 10
+  },
+  buttonText: {
+    color: buttonText,
+    fontSize: 20
+  },
+  signature: {
+    color: textMute,
+    fontSize: 12,
+    marginBottom: 20,
+    marginTop: 20,
+    textAlign: 'center'
   }
 });
 
