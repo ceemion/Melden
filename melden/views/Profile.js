@@ -8,9 +8,19 @@ import {
     View,
     Button,
     AlertIOS,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
-
+import {
+  text,
+  white,
+  error,
+  primary,
+  buttonText,
+  containerBg,
+  inputBorder
+} from '../utils/colors';
 import {
   titleHeight
 } from '../utils/variables';
@@ -28,10 +38,12 @@ class Profile extends Component {
     this.state = {
       uid: null,
       name: null,
-      email: null
+      email: null,
+      animating: false
     };
 
     this._updateProfile = this._updateProfile.bind(this);
+    this._renderButtonText = this._renderButtonText.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -71,21 +83,39 @@ class Profile extends Component {
   }
 
   async logout() {
+    this.setState({animating: true});
+
     try {
       await firebase.auth().signOut();
 
       this.props.navigator.push({
         name: "Login"
-      })
+      });
+
+      this.setState({animating: false})
     }
     catch(error) {
       console.log(error)
+      this.setState({animating: false})
     }
+  }
+
+  _renderButtonText() {
+    if (this.state.animating) {
+      return (
+        <ActivityIndicator
+          animating={true}
+          color="black"
+        />
+      )
+    }
+
+    return (<Text style={styles.buttonText}>Log Out</Text>)
   }
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <TopBar
           title="Profile"
           right={true}
@@ -100,17 +130,22 @@ class Profile extends Component {
         />
 
         <View style={styles.content}>
-          <Text>Profile</Text>
-          <Text>the profile of {this.state.uid}</Text>
-          <Text>email: {this.state.email}</Text>
-          <Text>name: {this.state.name}</Text>
+          <View style={styles.profileImage}>
+            <Text style={styles.profileImageText}>PP</Text>
+          </View>
 
-          <Button
-            onPress={this.logout}
-            title="Logout"
-            color="#841584"
-            accessibilityLabel="logout"
-          />
+          <View style={styles.details}>
+            <Text style={styles.name}>{this.state.name}</Text>
+            <Text style={styles.email}>{this.state.email}</Text>
+          </View>
+        </View>
+
+        <View>
+          <TouchableOpacity onPress={this.logout}>
+            <View style={styles.button}>
+              {this._renderButtonText()}
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -118,8 +153,56 @@ class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: containerBg,
+    flex: 1
+  },
   content: {
+    alignItems: 'center',
     marginTop: titleHeight
+  },
+  profileImage: {
+    alignItems: 'center',
+    backgroundColor: '#959ca7',
+    borderRadius: 100,
+    height: 200,
+    justifyContent: 'center',
+    marginBottom: 10,
+    marginTop: 34,
+    width: 200
+  },
+  profileImageText:  {
+    color: '#ffffff',
+    fontSize: 120
+  },
+  details: {
+    marginBottom: 35,
+    marginTop: 4
+  },
+  name: {
+    color: text,
+    fontSize: 20,
+    marginBottom: 30
+  },
+  email: {
+    color: primary
+  },
+  button: {
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    backgroundColor: white,
+    borderColor: inputBorder,
+    borderRadius: 12,
+    borderWidth: 1,
+    flexDirection: 'row',
+    height: 57,
+    justifyContent: 'center',
+    marginLeft: 10,
+    marginRight: 10
+  },
+  buttonText: {
+    color: error,
+    fontSize: 20
   }
 });
 

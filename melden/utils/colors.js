@@ -1,4 +1,5 @@
 export const primary = '#00797f';
+export const text = '#4a4a4a';
 export const success = '#5bc236';
 export const error = '#f33e39';
 
@@ -17,4 +18,4 @@ export const topBar = '#f9f9f9';
 export const topBorder = 'rgba(0,0,0,0.20)';
 
 export const inputBorder = '#d8d8d8';
-export const buttonText = '#4a4a4a';
+export const buttonText = text;
