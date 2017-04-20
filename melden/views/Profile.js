@@ -16,6 +16,7 @@ import {
 } from '../utils/variables';
 
 import * as firebase from "firebase";
+import Database from '../firebase/database';
 
 import TopBar from './TopBar';
 import UpdateProfileIcon from '../assets/images/header_bar_icons/update_profile.png';
@@ -48,10 +49,25 @@ class Profile extends Component {
     }
   }
 
-  _updateProfile(promptValue) {
+  async _updateProfile(promptValue) {
     this.setState({
       name: promptValue
-    })
+    });
+
+    try {
+      let user = await firebase.auth().currentUser;
+
+      user.updateProfile({
+        displayName: this.state.name
+      });
+
+      Database.updateUserData(user.uid, {
+        name: this.state.name
+      })
+    }
+    catch(error) {
+      console.log('update error: ', error)
+    }
   }
 
   async logout() {
@@ -78,7 +94,7 @@ class Profile extends Component {
             'Update Your Profile',
             this.state.name ? null : "What's your name?",
             this._updateProfile,
-            undefined,
+            'plain-text',
             this.state.name ? this.state.name : ''
             )}
         />

@@ -21,6 +21,12 @@ class Database {
       email: email
     });
   }
+
+  static updateUserData(userId, data) {
+    let userPath = 'users/' + userId;
+
+    return firebase.database().ref(userPath).update(data);
+  }
 }
 
 export default Database;
