@@ -43,6 +43,7 @@ class Profile extends Component {
     };
 
     this._updateProfile = this._updateProfile.bind(this);
+    this._constructImage = this._constructImage.bind(this);
     this._renderButtonText = this._renderButtonText.bind(this);
     this.logout = this.logout.bind(this);
   }
@@ -100,6 +101,14 @@ class Profile extends Component {
     }
   }
 
+  _constructImage(fullName) {
+    if (fullName) {
+      return fullName.replace(/\w\S*\s*/g, function(name){
+        return `${name.charAt(0).toUpperCase()}`
+      });
+    }
+  }
+
   _renderButtonText() {
     if (this.state.animating) {
       return (
@@ -131,7 +140,12 @@ class Profile extends Component {
 
         <View style={styles.content}>
           <View style={styles.profileImage}>
-            <Text style={styles.profileImageText}>PP</Text>
+            <Text
+              style={styles.profileImageText}
+              adjustsFontSizeToFit={true}
+              minimumFontScale={0.8}>
+              { this._constructImage(this.state.name) }
+            </Text>
           </View>
 
           <View style={styles.details}>
@@ -173,7 +187,7 @@ const styles = StyleSheet.create({
   },
   profileImageText:  {
     color: '#ffffff',
-    fontSize: 120
+    fontSize: 100
   },
   details: {
     marginBottom: 35,
@@ -182,10 +196,12 @@ const styles = StyleSheet.create({
   name: {
     color: text,
     fontSize: 20,
-    marginBottom: 30
+    marginBottom: 30,
+    textAlign: 'center'
   },
   email: {
-    color: primary
+    color: primary,
+    textAlign: 'center'
   },
   button: {
     alignItems: 'center',
