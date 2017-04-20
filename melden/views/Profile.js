@@ -102,11 +102,9 @@ class Profile extends Component {
   }
 
   _constructImage(fullName) {
-    if (fullName) {
-      return fullName.replace(/\w\S*\s*/g, function(name){
-        return `${name.charAt(0).toUpperCase()}`
-      });
-    }
+    return (fullName || 'M').replace(/\w\S*\s*/g, function(name){
+      return `${name.charAt(0).toUpperCase()}`
+    });
   }
 
   _renderButtonText() {
