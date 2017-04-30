@@ -7,6 +7,7 @@ import {
     Text,
     View,
     Button,
+    AlertIOS,
     StyleSheet,
     dismissKeyboard,
     TouchableWithoutFeedback
@@ -24,12 +25,13 @@ import DismissKeyboard from "dismissKeyboard";
 import * as firebase from "firebase";
 
 import TopBar from './TopBar';
+import CreateTaskIcon from '../assets/images/header_bar_icons/create_task.png';
 
 class Tasks extends Component {
   constructor(props) {
     super(props);
 
-    // state in pending, completed, deleted
+    // status in pending, completed, deleted
 
     this.state = {
       dailyTasks: [
@@ -38,7 +40,8 @@ class Tasks extends Component {
       ]
     };
 
-    this.renderTasks = this.renderTasks.bind(this)
+    this.renderTasks = this.renderTasks.bind(this);
+    this.createTask = this.createTask.bind(this);
   }
 
   async componentDidMount() {
@@ -61,12 +64,49 @@ class Tasks extends Component {
     })
   }
 
+  async createTask(promptValue) {
+    let all = this.state.dailyTasks;
+
+    all.push(
+      {title: promptValue, status: 'pending', completed_at: null}
+    )
+
+    this.setState({
+      dailyTasks: all
+    });
+
+    // try {
+    //   let user = await firebase.auth().currentUser;
+
+    //   user.updateProfile({
+    //     displayName: this.state.name
+    //   });
+
+    //   Database.updateUserData(user.uid, {
+    //     name: this.state.name
+    //   })
+    // }
+    // catch(error) {
+    //   console.log('update error: ', error)
+    // }
+  }
+
   render() {
     const currentDate = new Date().toDateString();
 
     return (
       <View style={styles.container} onPress={() => {DismissKeyboard()}}>
-        <TopBar title="Tasks" />
+        <TopBar
+          title="Tasks"
+          right={true}
+          rightIcon={CreateTaskIcon}
+          rightOnPress={() => AlertIOS.prompt(
+            'Add Task',
+            null,
+            this.createTask,
+            'plain-text'
+            )}
+        />
 
         <View style={styles.content}>
           <Text style={styles.currentDate}>Today: {currentDate}</Text>
