@@ -33,8 +33,8 @@ class Tasks extends Component {
 
     this.state = {
       dailyTasks: [
-        {title: 'Study design patterns in Ruby', state: 'pending', completed_at: null},
-        {title: "Listen to Benny Hinn's message on Secrets to Success", state: 'completed', completed_at: new Date().toString()}
+        {title: 'Study design patterns in Ruby', status: 'pending', completed_at: null},
+        {title: "Listen to Benny Hinn's message on Secrets to Success", status: 'completed', completed_at: new Date().toString()}
       ]
     };
 
@@ -62,12 +62,14 @@ class Tasks extends Component {
   }
 
   render() {
+    const currentDate = new Date().toDateString();
+
     return (
       <View style={styles.container} onPress={() => {DismissKeyboard()}}>
         <TopBar title="Tasks" />
 
         <View style={styles.content}>
-          <Text style={styles.currentDate}>Today: Sunday, 30 April 2017</Text>
+          <Text style={styles.currentDate}>Today: {currentDate}</Text>
 
           <View style={styles.tasksContainer}>
             {this.renderTasks()}
