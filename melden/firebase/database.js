@@ -48,6 +48,12 @@ class Database {
 
     return firebase.database().ref().update(updates);
   }
+
+  static listenForUserTasks() {
+    const userId = firebase.auth().currentUser.uid;
+
+    return firebase.database().ref(`/user-tasks/${TODAY}/${userId}`);
+  }
 }
 
 export default Database;

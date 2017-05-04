@@ -34,29 +34,34 @@ class Tasks extends Component {
   constructor(props) {
     super(props);
 
-    // status in pending, completed, deleted
-
     this.state = {
-      working: false,
+      working: true,
       dailyTasks: []
     };
+
+    Database.listenForUserTasks().on('value', snapshot => {
+        let taskArray = [];
+
+        if (snapshot.val()) {
+          let keys = Object.keys(snapshot.val());
+
+          for (const key of keys) {
+            taskArray.push(snapshot.val()[key])
+          }
+        }
+
+        this.setState({
+          working: false,
+          dailyTasks: taskArray
+        })
+      })
 
     this.renderTasks = this.renderTasks.bind(this);
     this.createTask = this.createTask.bind(this);
   }
 
-  async componentDidMount() {
-    try {
-      // Get all tasks for current date
-
-      this.setState({})
-    } catch(error) {
-      console.log(error);
-    }
-  }
-
-  renderTasks() {
-    if (this.state.dailyTasks.length === 0) {
+  renderTasks(tasks) {
+    if (!this.state.working && this.state.dailyTasks.length === 0) {
       return (
         <View>
           <Text style={styles.noTask}>You're all set, no tasks at this time!</Text>
@@ -74,26 +79,10 @@ class Tasks extends Component {
   }
 
   async createTask(promptValue) {
-    let all = this.state.dailyTasks;
-
-    all.push(
-      {title: promptValue, status: 'pending', completed_at: null}
-    )
-
-    this.setState({
-      working: true,
-      dailyTasks: all
-    });
-
     try {
       let user = await firebase.auth().currentUser;
 
       Database.createTask(user, promptValue)
-        .then(res => {
-          console.log('The returned response: ', res);
-          this.setState({working: false})
-        })
-
     }
     catch(error) {
       console.log('update error: ', error)
