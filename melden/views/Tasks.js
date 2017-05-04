@@ -46,7 +46,9 @@ class Tasks extends Component {
           let keys = Object.keys(snapshot.val());
 
           for (const key of keys) {
-            taskArray.push(snapshot.val()[key])
+            let i = snapshot.val()[key];
+            i.taskId = key;
+            taskArray.push(i)
           }
         }
 
@@ -58,6 +60,7 @@ class Tasks extends Component {
 
     this.renderTasks = this.renderTasks.bind(this);
     this.createTask = this.createTask.bind(this);
+    this.removeTask = this.removeTask.bind(this);
   }
 
   renderTasks(tasks) {
@@ -73,6 +76,7 @@ class Tasks extends Component {
       return (
         <View key={$index} style={styles.taskContainer}>
           <Text style={styles.taskTitle}>{task.title}</Text>
+          <Text onPress={() => this.removeTask(task.taskId)}>Delete</Text>
         </View>
       )
     })
@@ -86,6 +90,15 @@ class Tasks extends Component {
     }
     catch(error) {
       console.log('update error: ', error)
+    }
+  }
+
+  async removeTask(taskId) {
+    try {
+      Database.removeTask(taskId)
+    }
+    catch(error) {
+      console.log('delete error: ', error)
     }
   }
 

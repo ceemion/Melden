@@ -54,6 +54,15 @@ class Database {
 
     return firebase.database().ref(`/user-tasks/${TODAY}/${userId}`);
   }
+
+  static removeTask(taskId) {
+    const userId = firebase.auth().currentUser.uid;
+    const taskPath = `/tasks/${TODAY}/${taskId}`;
+    const userTaskPath = `/user-tasks/${TODAY}/${userId}/${taskId}`;
+
+    firebase.database().ref(taskPath).remove();
+    firebase.database().ref(userTaskPath).remove();
+  }
 }
 
 export default Database;
