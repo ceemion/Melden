@@ -10,6 +10,7 @@ import {
     AlertIOS,
     StyleSheet,
     dismissKeyboard,
+    ActivityIndicator,
     TouchableWithoutFeedback
 } from 'react-native';
 
@@ -21,8 +22,10 @@ import {
   textMute
 } from '../utils/colors';
 import DismissKeyboard from "dismissKeyboard";
+import moment from 'moment';
 
 import * as firebase from "firebase";
+import Database from '../firebase/database';
 
 import TopBar from './TopBar';
 import CreateTaskIcon from '../assets/images/header_bar_icons/create_task.png';
@@ -34,10 +37,8 @@ class Tasks extends Component {
     // status in pending, completed, deleted
 
     this.state = {
-      dailyTasks: [
-        {title: 'Study design patterns in Ruby', status: 'pending', completed_at: null},
-        {title: "Listen to Benny Hinn's message on Secrets to Success", status: 'completed', completed_at: new Date().toString()}
-      ]
+      working: false,
+      dailyTasks: []
     };
 
     this.renderTasks = this.renderTasks.bind(this);
@@ -55,6 +56,14 @@ class Tasks extends Component {
   }
 
   renderTasks() {
+    if (this.state.dailyTasks.length === 0) {
+      return (
+        <View>
+          <Text style={styles.noTask}>You're all set, no tasks at this time!</Text>
+        </View>
+      )
+    }
+
     return this.state.dailyTasks.map((task, $index) => {
       return (
         <View key={$index} style={styles.taskContainer}>
@@ -72,27 +81,27 @@ class Tasks extends Component {
     )
 
     this.setState({
+      working: true,
       dailyTasks: all
     });
 
-    // try {
-    //   let user = await firebase.auth().currentUser;
+    try {
+      let user = await firebase.auth().currentUser;
 
-    //   user.updateProfile({
-    //     displayName: this.state.name
-    //   });
+      Database.createTask(user, promptValue)
+        .then(res => {
+          console.log('The returned response: ', res);
+          this.setState({working: false})
+        })
 
-    //   Database.updateUserData(user.uid, {
-    //     name: this.state.name
-    //   })
-    // }
-    // catch(error) {
-    //   console.log('update error: ', error)
-    // }
+    }
+    catch(error) {
+      console.log('update error: ', error)
+    }
   }
 
   render() {
-    const currentDate = new Date().toDateString();
+    const currentDate = moment().format('dddd, MMMM Do YYYY');
 
     return (
       <View style={styles.container} onPress={() => {DismissKeyboard()}}>
@@ -113,6 +122,12 @@ class Tasks extends Component {
 
           <View style={styles.tasksContainer}>
             {this.renderTasks()}
+          </View>
+
+          <View style={styles.working}>
+            { this.state.working ?
+                <ActivityIndicator animating={true}/> : null
+            }
           </View>
         </View>
       </View>
@@ -145,6 +160,14 @@ const styles = StyleSheet.create({
   taskTitle: {
     color: text,
     fontSize: 20
+  },
+  noTask: {
+    color: textMute,
+    marginTop: 20,
+    textAlign: 'center'
+  },
+  working: {
+    marginTop: 10
   }
 });
 
