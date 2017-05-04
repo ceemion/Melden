@@ -6,21 +6,24 @@ import React, { Component } from 'react';
 import {
     Text,
     View,
+    Image,
     Button,
     AlertIOS,
     ScrollView,
+    Dimensions,
     StyleSheet,
     dismissKeyboard,
+    TouchableOpacity,
     ActivityIndicator,
     TouchableWithoutFeedback
 } from 'react-native';
-
 import {
   titleHeight
 } from '../utils/variables';
 import {
   text,
-  textMute
+  textMute,
+  listBorder
 } from '../utils/colors';
 import DismissKeyboard from "dismissKeyboard";
 import moment from 'moment';
@@ -30,6 +33,9 @@ import Database from '../firebase/database';
 
 import TopBar from './TopBar';
 import CreateTaskIcon from '../assets/images/header_bar_icons/create_task.png';
+import RemoveTaskIcon from '../assets/images/header_bar_icons/remove_task.png';
+
+let width = Dimensions.get('window').width;
 
 class Tasks extends Component {
   constructor(props) {
@@ -77,7 +83,10 @@ class Tasks extends Component {
       return (
         <View key={$index} style={styles.taskContainer}>
           <Text style={styles.taskTitle}>{task.title}</Text>
-          <Text onPress={() => this.removeTask(task.taskId)}>Delete</Text>
+
+          <TouchableOpacity onPress={() => this.removeTask(task.taskId)}>
+            <View><Image source={RemoveTaskIcon} style={styles.removeTaskIcon} /></View>
+          </TouchableOpacity>
         </View>
       )
     })
@@ -150,20 +159,25 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   tasksContainer: {
+    borderTopColor: listBorder,
+    borderTopWidth: 0.5,
     marginLeft: 4,
     marginRight: 4
   },
   taskContainer: {
-    borderColor: text,
-    borderRadius: 6,
-    borderWidth: 1,
+    alignItems: 'center',
+    borderBottomColor: listBorder,
+    borderBottomWidth: 0.5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 4,
-    paddingBottom: 8,
-    paddingTop: 12
+    paddingBottom: 7,
+    paddingTop: 7
   },
   taskTitle: {
     color: text,
-    fontSize: 20
+    fontSize: 16,
+    width: width - 40
   },
   noTask: {
     color: textMute,
@@ -172,6 +186,11 @@ const styles = StyleSheet.create({
   },
   working: {
     marginTop: 10
+  },
+  removeTaskIcon: {
+    height: 25,
+    marginRight: 10,
+    width: 25
   }
 });
 
