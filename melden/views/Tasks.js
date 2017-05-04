@@ -8,6 +8,7 @@ import {
     View,
     Button,
     AlertIOS,
+    ScrollView,
     StyleSheet,
     dismissKeyboard,
     ActivityIndicator,
@@ -119,7 +120,7 @@ class Tasks extends Component {
             )}
         />
 
-        <View style={styles.content}>
+        <ScrollView style={styles.content}>
           <Text style={styles.currentDate}>Today: {currentDate}</Text>
 
           <View style={styles.tasksContainer}>
@@ -131,16 +132,17 @@ class Tasks extends Component {
                 <ActivityIndicator animating={true}/> : null
             }
           </View>
-        </View>
+        </ScrollView>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  content: {
-    marginTop: titleHeight
+  container: {
+    flex: 1
   },
+  content: {},
   currentDate: {
     color: textMute,
     fontSize: 12,
