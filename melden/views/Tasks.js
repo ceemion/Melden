@@ -17,6 +17,7 @@ import {
     ActivityIndicator,
     TouchableWithoutFeedback
 } from 'react-native';
+import CheckBox from 'react-native-checkbox';
 import {
   titleHeight
 } from '../utils/variables';
@@ -33,7 +34,9 @@ import Database from '../firebase/database';
 
 import TopBar from './TopBar';
 import CreateTaskIcon from '../assets/images/header_bar_icons/create_task.png';
-import RemoveTaskIcon from '../assets/images/header_bar_icons/remove_task.png';
+import RemoveTaskIcon from '../assets/images/remove_task.png';
+import uncheckedIcon from '../assets/images/unchecked.png';
+import checkedIcon from '../assets/images/checked.png';
 
 let width = Dimensions.get('window').width;
 
@@ -82,10 +85,21 @@ class Tasks extends Component {
     return this.state.dailyTasks.map((task, $index) => {
       return (
         <View key={$index} style={styles.taskContainer}>
+          <View style={styles.checkbox}>
+            <CheckBox
+              label={null}
+              containerStyle={styles.checkboxContainer}
+              checkboxStyle={styles.checkboxStyle}
+              uncheckedImage={uncheckedIcon}
+              checkedImage={checkedIcon}
+              onChange={(checked) => console.log('I am checked', checked)}
+            />
+          </View>
+
           <Text style={styles.taskTitle}>{task.title}</Text>
 
           <TouchableOpacity onPress={() => this.removeTask(task.taskId)}>
-            <View><Image source={RemoveTaskIcon} style={styles.removeTaskIcon} /></View>
+            <Image source={RemoveTaskIcon} style={styles.removeTaskIcon} />
           </TouchableOpacity>
         </View>
       )
@@ -177,7 +191,7 @@ const styles = StyleSheet.create({
   taskTitle: {
     color: text,
     fontSize: 16,
-    width: width - 40
+    width: width - 70
   },
   noTask: {
     color: textMute,
@@ -191,6 +205,15 @@ const styles = StyleSheet.create({
     height: 25,
     marginRight: 10,
     width: 25
+  },
+  checkboxContainer: {
+    marginBottom: 0
+  },
+  checkboxStyle: {
+    marginRight: 0
+  },
+  checkbox: {
+    width: 30
   }
 });
 
