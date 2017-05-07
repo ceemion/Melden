@@ -45,6 +45,7 @@ class Tasks extends Component {
     super(props);
 
     this.state = {
+      user: null,
       working: true,
       dailyTasks: []
     };
@@ -71,6 +72,19 @@ class Tasks extends Component {
     this.renderTasks = this.renderTasks.bind(this);
     this.createTask = this.createTask.bind(this);
     this.removeTask = this.removeTask.bind(this);
+    this.completeTask = this.completeTask.bind(this);
+  }
+
+  async componentDidMount() {
+    try {
+      let user = await firebase.auth().currentUser;
+
+      this.setState({
+        user: user
+      })
+    } catch(error) {
+      console.log('could not retrieve user: ', error);
+    }
   }
 
   renderTasks(tasks) {
@@ -83,6 +97,8 @@ class Tasks extends Component {
     }
 
     return this.state.dailyTasks.map((task, $index) => {
+      let completed = task.status === 'completed';
+
       return (
         <View key={$index} style={styles.taskContainer}>
           <View style={styles.checkbox}>
@@ -90,17 +106,23 @@ class Tasks extends Component {
               label={null}
               containerStyle={styles.checkboxContainer}
               checkboxStyle={styles.checkboxStyle}
-              uncheckedImage={uncheckedIcon}
+              uncheckedImage={completed ? checkedIcon : uncheckedIcon}
               checkedImage={checkedIcon}
-              onChange={(checked) => console.log('I am checked', checked)}
+              onChange={
+                (checked) => this.completeTask(completed, checked, task.taskId)
+              }
             />
           </View>
 
-          <Text style={styles.taskTitle}>{task.title}</Text>
+          <View style={completed ? styles.titleContainerCompleted : styles.titleContainer}>
+            <Text style={styles.taskTitle}>{task.title}</Text>
+            <Text>{task.completedAt}</Text>
+          </View>
 
-          <TouchableOpacity onPress={() => this.removeTask(task.taskId)}>
-            <Image source={RemoveTaskIcon} style={styles.removeTaskIcon} />
-          </TouchableOpacity>
+          { !completed ?
+            <TouchableOpacity onPress={() => this.removeTask(task.taskId)}>
+              <Image source={RemoveTaskIcon} style={styles.removeTaskIcon} />
+            </TouchableOpacity> : null }
         </View>
       )
     })
@@ -108,9 +130,7 @@ class Tasks extends Component {
 
   async createTask(promptValue) {
     try {
-      let user = await firebase.auth().currentUser;
-
-      Database.createTask(user, promptValue)
+      Database.createTask(this.state.user, promptValue)
     }
     catch(error) {
       console.log('update error: ', error)
@@ -119,10 +139,21 @@ class Tasks extends Component {
 
   async removeTask(taskId) {
     try {
-      Database.removeTask(taskId)
+      Database.removeTask(this.state.user.uid, taskId)
     }
     catch(error) {
       console.log('delete error: ', error)
+    }
+  }
+
+  async completeTask(completed, checked, taskId) {
+    if (completed) return;
+
+    try {
+      Database.completeTask(this.state.user.uid, taskId)
+    }
+    catch(error) {
+      console.log('task complete error: ', error)
     }
   }
 
@@ -188,10 +219,15 @@ const styles = StyleSheet.create({
     paddingBottom: 7,
     paddingTop: 7
   },
+  titleContainer: {
+    width: width - 70
+  },
+  titleContainerCompleted: {
+    width: width - 40
+  },
   taskTitle: {
     color: text,
-    fontSize: 16,
-    width: width - 70
+    fontSize: 16
   },
   noTask: {
     color: textMute,

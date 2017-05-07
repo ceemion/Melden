@@ -36,8 +36,7 @@ class Database {
       uid: user.uid,
       title: title,
       status: 'pending',
-      createdAt: NOW,
-      completedAt: null
+      createdAt: NOW
     }
 
     let newTaskKey = firebase.database().ref().child('tasks').push().key;
@@ -51,17 +50,27 @@ class Database {
 
   static listenForUserTasks() {
     const userId = firebase.auth().currentUser.uid;
-
     return firebase.database().ref(`/user-tasks/${TODAY}/${userId}`);
   }
 
-  static removeTask(taskId) {
-    const userId = firebase.auth().currentUser.uid;
+  static removeTask(userId, taskId) {
     const taskPath = `/tasks/${TODAY}/${taskId}`;
     const userTaskPath = `/user-tasks/${TODAY}/${userId}/${taskId}`;
 
     firebase.database().ref(taskPath).remove();
     firebase.database().ref(userTaskPath).remove();
+  }
+
+  static completeTask(userId, taskId) {
+    const taskPath = `/tasks/${TODAY}/${taskId}`;
+    const userTaskPath = `/user-tasks/${TODAY}/${userId}/${taskId}`;
+    const payload = {
+      status: 'completed',
+      completedAt: NOW
+    }
+
+    firebase.database().ref(taskPath).update(payload)
+    firebase.database().ref(userTaskPath).update(payload)
   }
 }
 
